@@ -4,5 +4,5 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^$', views.home),
+    url(r'^(?P<label>[\w-]{,50})/$', views.home),
 ]
