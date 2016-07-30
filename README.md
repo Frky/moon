@@ -12,11 +12,14 @@ $ npm install
 ```
 
 3. Copy the `moon/settings/local_sample.py` to `moon/settings/local.py` and replace the right values
-4. Run the two servers
+4. Setup the REDIS_URL env variable if needed
+5. Run the two servers
 
 ```
 $ ./manage.py runserver
 $ npm start
+$ ./manage.py runworker
+$ daphne moon.asgi:channel_layer --port 8888
 ```
 
-5. Have fun!
+6. Have fun!
