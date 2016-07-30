@@ -13,7 +13,7 @@ $ npm install
 
 3. Copy the `moon/settings/local_sample.py` to `moon/settings/local.py` and replace the right values
 4. Setup the REDIS_URL env variable if needed
-5. Run the two servers
+5. Run the 3 process
 
 ```
 $ ./manage.py runserver
