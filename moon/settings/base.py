@@ -103,6 +103,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'website.auth_backend.PasswordlessAuthBackend',
+)
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/

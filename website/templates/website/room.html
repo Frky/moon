@@ -1,0 +1,21 @@
+{% load static %}
+{% load render_bundle from webpack_loader %}
+
+<html>
+<head>
+    <title>M O O N</title>
+
+    <link rel="shortcut icon" type="image/png" href="{% static "website/favicon.ico" %}"/>
+</head>
+<body>
+    <div>
+        {{ user }} is logged
+    </div>
+
+    <div id="app"></div>
+
+    <script src="{% static "website/lib/reconnecting-websocket.min.js" %}"></script>
+
+    {% render_bundle 'main' %}
+</body>
+</html>
