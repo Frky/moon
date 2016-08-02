@@ -13,10 +13,16 @@ $ npm install
 
 3. Copy the `moon/settings/local_sample.py` to `moon/settings/local.py` and replace the right values
 4. Setup the REDIS_URL env variable if needed
-5. Run the 3 process
+5. Play the Django migrations
 
 ```
-$ ./manage.py runserver
+$ ./manage.py migrate
+```
+
+6. Run the 3 process
+
+```
+$ ./manage.py runserver --noworker
 $ npm start
 $ ./manage.py runworker
 $ daphne moon.asgi:channel_layer --port 8888
