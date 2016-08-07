@@ -1,34 +1,50 @@
-from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.shortcuts import render, redirect
 
+<<<<<<< HEAD
 from .models import Room
 from .forms import UsernameForm
+||||||| merged common ancestors
+from website.models import Room
+=======
+from website.models import Comptoir
+>>>>>>> Rename Room into Comptoir and add user authentication
 
+def index(req):
+    # Homepage of the website
+    print AuthenticationForm()
+    return render(req, "website/index.html", {
+        'registrationForm': UserCreationForm(),
+        'authenticationForm': AuthenticationForm(),
+    })
 
-def home(request):
-
-    if request.method == 'POST':
-        form = UsernameForm(request.POST)
-        if form.is_valid():
-            cleaned_data = form.cleaned_data
-            user = authenticate(username=cleaned_data.get('username'))
-            if user is not None and user.is_active:
-                login(request, user)
-    else:
-        form = UsernameForm()
-
-    return render(request, "website/home.html", {'form': form})
-
-
-def room(request, label):
-    # If the room with the given label doesn't exist, automatically create it
+def comptoir(req, label):
+    # If the comptoir with the given label doesn't exist, automatically create it
     # upon first visit (a la etherpad).
-    room, created = Room.objects.get_or_create(label=label)
+    comptoir, created = Comptoir.objects.get_or_create(label=label)
 
     # We want to show the last 50 messages, ordered most-recent-last
-    messages = reversed(room.messages.order_by('-timestamp')[:50])
+    messages = reversed(comptoir.messages.order_by('-timestamp')[:50])
 
-    return render(request, "website/room.html", {
-        'room': room,
+    return render(req, "website/comptoir.html", {
+        'comptoir': comptoir,
         'messages': messages,
     })
+
+# Authentication views
+def register(req):
+    reg_form = UserCreationForm(req.POST or None, label_suffix='')
+    # Check the form validity
+    if reg_form.is_valid():
+        # Register the new user
+        new_user = reg_form.save()
+        # Authenticate
+        new_user = authenticate(username=new_user.username, password=req.POST["password1"])
+        # Log the new user in
+        login(req, new_user)
+    else:
+        # TODO better
+        print reg_form.errors
+    return redirect("index")
+

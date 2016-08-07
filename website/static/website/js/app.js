@@ -1,5 +1,5 @@
 import React from "react";
-import { Chance }from "chance";
+import { Chance } from "chance";
 
 import WriteMessage from "./components/WriteMessage";
 import Messages from "./components/Messages";
