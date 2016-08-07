@@ -2,14 +2,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, redirect
 
-<<<<<<< HEAD
-from .models import Room
-from .forms import UsernameForm
-||||||| merged common ancestors
-from website.models import Room
-=======
 from website.models import Comptoir
->>>>>>> Rename Room into Comptoir and add user authentication
+from .forms import UsernameForm
 
 def index(req):
     # Homepage of the website

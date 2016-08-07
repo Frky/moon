@@ -12,7 +12,11 @@
 
     <p>Hello, <span id="user">{{ user.username }}</span></p>
 
+    <div id="app"></div>
+
     <script src="{% static "website/lib/reconnecting-websocket.min.js" %}"></script>
+
+    {% render_bundle 'main' %}
 
 </body>
 </html>

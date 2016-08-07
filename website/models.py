@@ -22,7 +22,7 @@ class Message(models.Model):
 
 
 class ConnexionRecord(models.Model):
-    room = models.ForeignKey(Room, related_name='connexion')
+    comptoir = models.ForeignKey(Comptoir, related_name='connexion')
     user = models.CharField(max_length=256)
     instances = models.IntegerField(default=0)
 
@@ -30,4 +30,4 @@ class ConnexionRecord(models.Model):
     last_event = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ('room', 'user')
+        unique_together = ('comptoir', 'user')

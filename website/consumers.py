@@ -2,13 +2,7 @@ from channels import Group
 from channels.sessions import channel_session
 from channels.auth import http_session_user, channel_session_user, channel_session_user_from_http, http_session
 import json
-<<<<<<< HEAD
-from .models import Room, ConnexionRecord
-||||||| merged common ancestors
-from .models import Room
-=======
-from .models import Comptoir
->>>>>>> Rename Room into Comptoir and add user authentication
+from .models import Comptoir, ConnexionRecord
 
 
 @channel_session_user_from_http
@@ -18,11 +12,11 @@ def ws_connect(message):
     Group('chat-' + label).add(message.reply_channel)
     message.channel_session['comptoir'] = comptoir.label
 
-    cr, created = ConnexionRecord.objects.get_or_create(user=message.user.username, room=room)
+    cr, created = ConnexionRecord.objects.get_or_create(user=message.user.username, comptoir=comptoir)
     cr.instances = 1
     cr.save()
 
-    users = [d['user'] for d in ConnexionRecord.objects.filter(room=room, instances__gt=0).values('user').all()]
+    users = [d['user'] for d in ConnexionRecord.objects.filter(comptoir=comptoir, instances__gt=0).values('user').all()]
     print(users)
     Group('chat-' + label).send({'text': json.dumps({'users': users})})
 
@@ -45,7 +39,6 @@ def ws_receive(message):
 
 @channel_session_user
 def ws_disconnect(message):
-<<<<<<< HEAD
     label = message.channel_session['comptoir']
     comptoir = Comptoir.objects.get(label=label)
     # message.channel_session['users'].pop(message.user)
