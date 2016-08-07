@@ -95,3 +95,6 @@ ENV/
 node_modules/
 webpack-stats.json
 babel-loader
+
+# MAC DS Store file
+.DS_Store
