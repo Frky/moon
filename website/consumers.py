@@ -2,13 +2,13 @@ from channels import Group
 from channels.sessions import channel_session
 from channels.auth import http_session_user, channel_session_user, channel_session_user_from_http, http_session
 import json
-from .models import Comptoir, ConnexionRecord
+from .models import aComptoir, ConnexionRecord
 
 
 @channel_session_user_from_http
 def ws_connect(message):
     basepath, prefix, label = message['path'].strip('/').split('/')
-    comptoir = Comptoir.objects.get(label=label)
+    comptoir = aComptoir.objects.get(label=label)
     Group('chat-' + label).add(message.reply_channel)
     message.channel_session['comptoir'] = comptoir.label
 
@@ -24,7 +24,7 @@ def ws_connect(message):
 @channel_session_user
 def ws_receive(message):
     label = message.channel_session['comptoir']
-    comptoir = Comptoir.objects.get(label=label)
+    comptoir = aComptoir.objects.get(label=label)
     data = json.loads(message['text'])
     print(data)
 
@@ -40,7 +40,7 @@ def ws_receive(message):
 @channel_session_user
 def ws_disconnect(message):
     label = message.channel_session['comptoir']
-    comptoir = Comptoir.objects.get(label=label)
+    comptoir = aComptoir.objects.get(label=label)
     # message.channel_session['users'].pop(message.user)
     Group('chat-' + label).discard(message.reply_channel)
 

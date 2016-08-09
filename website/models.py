@@ -3,12 +3,21 @@ from django.utils import timezone
 
 from django.contrib.auth.models import User
 
-class Comptoir(models.Model):
+
+# General (abstract) class for a Comptoir
+class aComptoir(models.Model):
     name = models.TextField()
     label = models.SlugField(unique=True)
 
+
+# Anonymous Comptoir
+class UndergroundComptoir(aComptoir):
+    # This field stores a bcrypt of the comptoir key (if ciphered)
+    keyprint = models.CharField(max_length=60, blank=True, null=True)
+
+
 class Message(models.Model):
-    comptoir = models.ForeignKey(Comptoir, related_name='messages')
+    comptoir = models.ForeignKey(aComptoir, related_name='messages')
     handle = models.TextField()
     message = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
@@ -22,7 +31,7 @@ class Message(models.Model):
 
 
 class ConnexionRecord(models.Model):
-    comptoir = models.ForeignKey(Comptoir, related_name='connexion')
+    comptoir = models.ForeignKey(aComptoir, related_name='connexion')
     user = models.CharField(max_length=256)
     instances = models.IntegerField(default=0)
 

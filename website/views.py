@@ -1,8 +1,11 @@
+import bcrypt
+
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, redirect
 
-from website.models import Comptoir
+from website.models import UndergroundComptoir
 from .forms import UsernameForm
 
 def index(req):
@@ -13,11 +16,39 @@ def index(req):
         'authenticationForm': AuthenticationForm(),
     })
 
-def comptoir(req, label):
-    # If the comptoir with the given label doesn't exist, automatically create it
-    # upon first visit (a la etherpad).
-    comptoir, created = Comptoir.objects.get_or_create(label=label)
+def underground_comptoir(req, label):
+    # First, key provided or not?
+    if "key" in req.POST.keys():
+        key = req.POST["key"]
+    elif "key" in req.GET.keys():
+        key = req.GET["key"]
+    else:
+        key = None
 
+    # First, see if comptoir exists
+    try:
+        comptoir = UndergroundComptoir.objects.get(label=label)
+        # Get fingerprint from the key
+        if key is not None:
+            salt = comptoir.keyprint
+            keyprint = bcrypt.hashpw(key.encode("utf-8"), salt.encode("utf-8"))
+        else:
+            keyprint = None
+        # Check the keyprint
+        if keyprint != comptoir.keyprint:
+            # TODO error message
+            # TODO handle error correctly
+            # (redirect to home is NOT a reliable way to do)
+            return redirect("index")
+    # If not
+    except ObjectDoesNotExist:
+        # We create it
+        comptoir = UndergroundComptoir(
+                                        label=label, 
+                                        keyprint=bcrypt(keyprint.encode("utf-8"), bcrypt.gensalt()),
+                                    )
+        comptoir.save()
+        
     # We want to show the last 50 messages, ordered most-recent-last
     messages = reversed(comptoir.messages.order_by('-timestamp')[:50])
 
