@@ -14,10 +14,10 @@ from .forms import AnonymousForm, RegisteredForm
 def index(req):
     # Homepage of the website
     # If a form was posted
-    if "form-type" in req.POST.keys():
+    if "form_type" in req.POST.keys():
         username = req.POST.get("username")
         # Anonymous registration
-        if req.POST["form-type"] == "anonymous":
+        if req.POST["form_type"] == "anonymous":
             password = getattr(settings, "ANONYMOUS_PASSWORD", None) 
             # If username does not exist, 
             # create it with default anonymous password
@@ -26,7 +26,7 @@ def index(req):
                 print("user created")
                 user.set_password(password)
                 user.save()
-        elif req.POST["form-type"] == "registered":
+        elif req.POST["form_type"] == "registered":
             password = req.POST.get("password")
         print(username, password)
         user = authenticate(username=username, password=password)
