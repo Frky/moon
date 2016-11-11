@@ -13,3 +13,4 @@ Twisted==16.2.0
 txaio==2.5.1
 wheel==0.24.0
 zope.interface==4.2.0
+bcrypt==3.1.0
