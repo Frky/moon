@@ -7,7 +7,7 @@
 }
 
 .chatbox td.td-separator {
-    width: 20px;
+    width: 21px;
     background-image: url("../../img/vert-line.png");
     background-position-x: center;
     background-repeat: repeat-y;
