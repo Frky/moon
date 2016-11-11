@@ -7,8 +7,8 @@ export default class Messages extends React.Component {
     const messages = [];
     let last = "";
     for (let msg of this.props.messages) {
-        messages.push(<Message {...msg} separator={last != msg.handle} />);
-        last = msg.handle;
+        messages.push(<Message {...msg} separator={last != msg.user} />);
+        last = msg.user;
     }
 
     return (

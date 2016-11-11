@@ -1,29 +1,41 @@
 import React from "react";
-import { Chance } from "chance";
 
-import WriteMessage from "./components/WriteMessage";
-import Messages from "./components/Messages";
+import { Comptoir } from "./components/";
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { messages: [], connected: false, users: []}
+    this.state = {
+      connected: false,
+      comptoirs: {},
+      messages: [],
+      users: []
+    };
+
+    this.selectedComptoirs = ['plop', 'yolo'];
+
+    // Init socket connection (contains setState refresh)
+    this._initSocketConnection();
+
+    // Hack: TODO something dynamic
+    this.state.comptoirs = this._initComptoirState(this.selectedComptoirs);
   }
 
-  componentDidMount() {
+  _initSocketConnection() {
+    // Connection with the websocket
     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-    this.chatsock = new ReconnectingWebSocket(ws_scheme + '://' + window.location.host + "/chat" + window.location.pathname);
+    this.chatsock = new ReconnectingWebSocket(ws_scheme + '://' + window.location.host + "/chat");
+    console.log('did mount', this.chatsock);
 
+    // OnOpen callback
     this.chatsock.onopen = event => {
       this.setState({
         connected: true
-      })
-      console.log(this.chatsock);
-      /*this.chatsock.send(JSON.stringify({
-        action: 'GET_USERS'
-      }))*/
+      });
+
     };
 
+    // OnClose callback
     this.chatsock.onclose = event => {
       this.setState({
         connected: false
@@ -31,38 +43,62 @@ export default class App extends React.Component {
     };
 
     this.chatsock.onmessage = (message) => {
-      let messages = this.state.messages.slice();
       const data = JSON.parse(message.data);
+      const action = data.action;
+      console.log('data received', data);
 
-      if (Object.keys(data).indexOf('users') >= 0) {
+      if (action == 'MSG') {
+        this.state.comptoirs[data.comptoir].messages.push(data);
+        this.setState({});
+      }
+      //let messages = this.state.messages.slice();
+
+      /*if (Object.keys(data).indexOf('users') >= 0) {
         console.log(data);
         this.setState({ users: data.users });
       } else {
         messages.push(JSON.parse(message.data));
         this.setState({ messages: messages });
-      }
+      }*/
     };
+  }
+
+  _initComptoirState(comptoirs) {
+    const output = {}
+    for (let c of comptoirs) {
+      output[c] = {messages: [], users: []}
+    }
+    return output
   }
 
   sendMessage(msg) {
-    const payload = {
-      handle: this.state.user,
-      message: msg
-    };
-    this.chatsock.send(JSON.stringify(payload));
+    this.chatsock.send(JSON.stringify(msg));
+  }
+
+  componentDidUpdate() {
+    if (this.state.connected) {
+      document.title = '🌕 M O O N 🌕'
+    } else {
+      document.title = '🌑 M O O N 🌑'
+    }
   }
 
   render() {
+    const comptoirsHTML = this.selectedComptoirs.map(c => (
+      <Comptoir
+        name={c}
+        connected={this.state.connected}
+        sendMessage={this.sendMessage.bind(this)}
+        {...this.state.comptoirs[c]}
+      />
+    ));
+
     return (
       <div className="chatbox">
         <h1>M O O N Y (<span>{this.state.connected ? 'connected' : 'disconnected'}</span>)</h1>
-        <div>{this.state.users.join(', ')} connected</div>
-        <Messages
-          messages={this.state.messages}
-        />
-        <WriteMessage
-          sendMessage={this.sendMessage.bind(this)}
-        />
+        <hr/>
+        
+        {comptoirsHTML}
       </div>
     )
   }

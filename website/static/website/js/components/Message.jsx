@@ -5,7 +5,7 @@ export default class Message extends React.Component {
     return (
       <tr>
         <td className="td-user">
-            { this.props.separator ? <b>{this.props.handle}</b> : "" }
+            { this.props.separator ? <b>{this.props.user}</b> : "" }
         </td>
         <td className="td-separator">
             { this.props.separator ? <div>•</div> : "" }
