@@ -45,7 +45,6 @@ export default class App extends React.Component {
     this.chatsock.onmessage = (message) => {
       const data = JSON.parse(message.data);
       const action = data.action;
-      console.log('data received', data);
 
       if (action == 'MSG') {
         this.state.comptoirs[data.comptoir].messages.push(data);

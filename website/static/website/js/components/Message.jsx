@@ -1,4 +1,6 @@
 import React from "react";
+import { msgify } from '../utils';
+
 
 export default class Message extends React.Component {
   render() {
@@ -11,7 +13,7 @@ export default class Message extends React.Component {
             { this.props.separator ? <div>•</div> : "" }
         </td>
         <td className="td-msg">
-            {this.props.message}
+          <span dangerouslySetInnerHTML={{__html: msgify(this.props.message)}}></span>
         </td>
       </tr>
     )
