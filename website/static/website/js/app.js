@@ -54,7 +54,7 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="chatbox">
         <h1>M O O N Y (<span>{this.state.connected ? 'connected' : 'disconnected'}</span>)</h1>
         <div>{this.state.users.join(', ')} connected</div>
         <Messages

@@ -1,0 +1,23 @@
+
+.chatbox tr {
+}
+
+.chatbox td {
+    line-height: 25px;
+}
+
+.chatbox td.td-separator {
+    width: 20px;
+    background-image: url("../../img/vert-line.png");
+    background-position-x: center;
+    background-repeat: repeat-y;
+}
+
+.chatbox td.td-separator > div {
+    background-color: white;
+    position: relative;
+    height: 10px;
+    line-height: 10px;
+    text-align: center;
+    color: red;
+}
