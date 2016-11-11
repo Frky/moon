@@ -2,6 +2,7 @@ import bcrypt
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, redirect
 
@@ -15,6 +16,7 @@ def index(req):
         'authenticationForm': AuthenticationForm(),
     })
 
+@login_required(login_url="index")
 def underground_comptoir(req, label):
     # First, key provided or not?
     if "key" in req.POST.keys():
