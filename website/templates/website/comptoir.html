@@ -17,7 +17,11 @@
 
     <script src="{% static "website/lib/reconnecting-websocket.min.js" %}"></script>
 
-    {% render_bundle 'main' %}
+    {% if DEV %}
+        {% render_bundle 'main' %}
+    {% else %}
+        <script src="{% static "dist/app.bundle.js" %}"></script>
+    {% endif %}
 
 </body>
 </html>
