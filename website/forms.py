@@ -1,9 +1,26 @@
 from django import forms
 
 
-class UsernameForm(forms.Form):
-    username = forms.CharField(label='username', max_length=64)
+class AnonymousForm(forms.Form):
+    username = forms.CharField(
+        label='Username', 
+        max_length=64,
+    )
+    form_type = forms.CharField(
+        label='form-type', 
+        max_length=64, 
+        initial='anonymous',
+        widget=forms.HiddenInput,
+    )
 
-
-class RoomForm(forms.Form):
-    room = forms.CharField(label='room', max_length=64)
+class RegisteredForm(AnonymousForm):
+    password = forms.CharField(
+        label='password', 
+        widget=forms.PasswordInput,
+    )
+    form_type = forms.CharField(
+        label='form-type', 
+        max_length=64, 
+        initial='anonymous',
+        widget=forms.HiddenInput,
+    )

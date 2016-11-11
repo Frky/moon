@@ -104,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'website.auth_backend.PasswordlessAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 
@@ -146,3 +146,5 @@ CHANNEL_LAYERS = {
         "ROUTING": "website.routing.channel_routing",
     },
 }
+
+ANONYMOUS_PASSWORD = 'itisimportanttohavesucurepasswords!'

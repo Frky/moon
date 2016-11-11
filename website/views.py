@@ -1,19 +1,40 @@
 import bcrypt
 
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
 from website.models import UndergroundComptoir
-from .forms import UsernameForm
+from .forms import AnonymousForm, RegisteredForm
 
 def index(req):
     # Homepage of the website
+    # If a form was posted
+    if "form-type" in req.POST.keys():
+        username = req.POST.get("username")
+        # Anonymous registration
+        if req.POST["form-type"] == "anonymous":
+            password = getattr(settings, "ANONYMOUS_PASSWORD", None) 
+            # If username does not exist, 
+            # create it with default anonymous password
+            user, created = User.objects.get_or_create(username=username)
+            if created:
+                print("user created")
+                user.set_password(password)
+                user.save()
+        elif req.POST["form-type"] == "registered":
+            password = req.POST.get("password")
+        print(username, password)
+        user = authenticate(username=username, password=password)
+        if user is not None and user.is_authenticated():
+            login(req, user)
     return render(req, "website/index.html", {
-        'registrationForm': UserCreationForm(),
-        'authenticationForm': AuthenticationForm(),
+        'anonymousForm': AnonymousForm(),
+        'registeredForm': RegisteredForm(),
     })
 
 @login_required(login_url="index")
