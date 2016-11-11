@@ -10,7 +10,6 @@ from .forms import UsernameForm
 
 def index(req):
     # Homepage of the website
-    print AuthenticationForm()
     return render(req, "website/index.html", {
         'registrationForm': UserCreationForm(),
         'authenticationForm': AuthenticationForm(),
@@ -43,9 +42,13 @@ def underground_comptoir(req, label):
     # If not
     except ObjectDoesNotExist:
         # We create it
+        if key is None: 
+            keyprint = None
+        else:
+            keyprint = bcrypt(key.encode("utf-8"), bcrypt.gensalt()),
         comptoir = UndergroundComptoir(
                                         label=label, 
-                                        keyprint=bcrypt(keyprint.encode("utf-8"), bcrypt.gensalt()),
+                                        keyprint=keyprint,
                                     )
         comptoir.save()
         
@@ -70,6 +73,6 @@ def register(req):
         login(req, new_user)
     else:
         # TODO better
-        print reg_form.errors
+        print(reg_form.errors)
     return redirect("index")
 
