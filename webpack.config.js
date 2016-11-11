@@ -2,11 +2,14 @@ var path = require("path")
 var webpack = require('webpack')
 var BundleTracker = require('webpack-bundle-tracker')
 
+var hostname = process.argv[2] || 'localhost:3000';
+
+
 module.exports = {
   context: __dirname,
 
   entry: [
-    'webpack-dev-server/client?http://localhost:3000',
+    'webpack-dev-server/client?http://' + hostname,
     'webpack/hot/only-dev-server',
     './website/static/website/js/index',
   ],
@@ -14,7 +17,7 @@ module.exports = {
   output: {
     path: path.resolve('./website/static/dist/'),
     filename: "[name]-[hash].js",
-    publicPath: 'http://localhost:3000/website/static/dist/'
+    publicPath: 'http://' + hostname + '/website/static/dist/'
   },
 
   plugins: [
