@@ -15,10 +15,15 @@ export default class WriteMessage extends React.Component {
 
   render() {
     return (
-      <div>
-        <textarea ref="textarea" onKeyDown={this.onKeyDown.bind(this)}></textarea>
-        <input type="button" value="submit" onClick={this.sendMessage.bind(this)} />
-      </div>
+      <tr>
+        <td className="td-user">
+        </td>
+        <td className="td-separator">
+        </td>
+        <td className="td-msg">
+          <textarea ref="textarea" className="msg-input" onKeyDown={this.onKeyDown.bind(this)}></textarea>
+        </td>
+      </tr>
     )
   }
 }
