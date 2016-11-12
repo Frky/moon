@@ -29,3 +29,8 @@ $ daphne moon.asgi:channel_layer --port 8888
 ```
 
 6. Have fun!
+
+# To deploy
+
+1. webpack -p --config webpack-prod.config.js
+2. scp website/static/dist/app.bundle.js  root@blef.fr:/var/www/moon/static/dist/app.bundle.js
