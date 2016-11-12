@@ -32,6 +32,9 @@ def index(req):
         user = authenticate(username=username, password=password)
         if user is not None and user.is_authenticated():
             login(req, user)
+    next_page = req.POST.get("next")
+    if next_page is not None and next_page != "":
+        return redirect(next_page)
     return render(req, "website/index.html", {
         'anonymousForm': AnonymousForm(),
         'registeredForm': RegisteredForm(),
