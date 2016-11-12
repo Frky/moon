@@ -16,28 +16,28 @@
     width: 100%;
 }
 
-.chatbox tr {
+.comptoir tr {
     position: relative;
 }
 
-.chatbox td {
+.comptoir td {
     height: 21px;
     padding: 0px;
 }
 
-.chatbox td.td-user {
+.comptoir td.td-user {
     width: 80px;
     text-align: right;
 }
 
-.chatbox td.td-separator {
+.comptoir td.td-separator {
     width: 21px;
     background-image: url("../../img/vert-line.png");
     background-position-x: center;
     background-repeat: repeat-y;
 }
 
-.chatbox td.td-separator > div {
+.comptoir td.td-separator > div {
     font-size: 0.7em;
     height: 12px;
     line-height: 12px;
@@ -51,18 +51,18 @@
     color: red;
 }
 
-.chatbox td.td-msg {
+.comptoir td.td-msg {
     position: absolute;
     left: 101px;
     right: 0px;
 }
 
-.chatbox td.td-separator > div > .round {
+.comptoir td.td-separator > div > .round {
     border-radius: 50%;
     background-color: red;
 }
 
-.comptoir-container table {
+.comptoir table {
     border-collapse:collapse;
     border-width: 0px;
     border-spacing: 0px;
@@ -89,7 +89,7 @@
     height: 100%;
 }
 
-.chatbox td.td-msg .msg-input {
+.comptoir td.td-msg .msg-input {
 	border: none;
     overflow: auto;
     outline: none;

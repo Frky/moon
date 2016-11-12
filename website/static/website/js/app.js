@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Comptoir } from "./components/";
+import { Bar, Comptoir } from "./components";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -12,10 +12,16 @@ export default class App extends React.Component {
       users: []
     };
 
-    this.selectedComptoirs = ['plop', 'yolo', 'mdr'];
-
     // Init socket connection (contains setState refresh)
     this._initSocketConnection();
+
+    if (window.location.pathname == '/u/agora') {
+        this.selectedComptoirs = ["plop", "mdr"];
+        this.state.is_bar = true;
+    } else {
+        this.selectedComptoirs = [window.location.pathname.replace('/u/', '')];
+        this.state.is_bar = false;
+    }
 
     // Hack: TODO something dynamic
     this.state.comptoirs = this._initComptoirState(this.selectedComptoirs);
@@ -65,13 +71,18 @@ export default class App extends React.Component {
   _initComptoirState(comptoirs) {
     const output = {}
     for (let c of comptoirs) {
-      output[c] = {messages: [], users: []}
+      output[c] = {messages: [], users: []};
     }
     return output
   }
 
   sendMessage(msg) {
     this.chatsock.send(JSON.stringify(msg));
+  }
+
+  joinComptoir(cmptr) {
+    this.state.comptoirs[cmptr] = {messages: [], users: []};
+    this.setState({});
   }
 
   componentDidUpdate() {
@@ -83,24 +94,33 @@ export default class App extends React.Component {
   }
 
   render() {
-    const comptoirsHTML = this.selectedComptoirs.map(c => (
-      <Comptoir
-        name={c}
-        connected={this.state.connected}
-        sendMessage={this.sendMessage.bind(this)}
-        {...this.state.comptoirs[c]}
-      />
-    ));
-
+    let comptoirsHTML;
+    if (this.state.is_bar) {
+      comptoirsHTML = (
+        <Bar 
+            sendMessage={this.sendMessage.bind(this)} 
+            joinComptoir={this.joinComptoir.bind(this)}
+            connected={this.state.connected}
+            comptoirs={this.state.comptoirs}
+        />
+      );
+    } else {
+      const cmptr = window.location.pathname.replace('/u/', '');
+      comptoirsHTML = (
+        <Comptoir
+          name={cmptr}
+          connected={this.state.connected}
+          sendMessage={this.sendMessage.bind(this)}
+          {...this.state.comptoirs[cmptr]}
+        />
+      );
+    }
     return (
-      <div className="chatbox">
+      <div>
         <h1>M O O N Y (<span>{this.state.connected ? 'connected' : 'disconnected'}</span>)</h1>
         <hr/>
-        
-        <div className="comptoir-container">
-          {comptoirsHTML}
-        </div>
+        {comptoirsHTML}
       </div>
-    )
+    );
   }
 }

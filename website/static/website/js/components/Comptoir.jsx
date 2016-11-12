@@ -8,13 +8,21 @@ export default class Comptoir extends React.Component {
     this.state = {};
   }
 
-  componentDidUpdate() {
+  join() {
     if (this.props.connected) {
       this.props.sendMessage({
         action: 'JOIN',
         comptoir: this.props.name
       });
     }
+  }
+
+  componentDidMount() {
+      this.join();
+  }
+
+  componentDidUpdate() {
+    this.join();
   }
 
   componentWillReceiveProps(nextProps) {
