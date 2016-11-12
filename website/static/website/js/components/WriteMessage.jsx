@@ -15,6 +15,7 @@ export default class WriteMessage extends React.Component {
 
   render() {
     return (
+      <tfoot>
       <tr>
         <td className="td-user">
         </td>
@@ -24,6 +25,7 @@ export default class WriteMessage extends React.Component {
           <textarea ref="textarea" className="msg-input" onKeyDown={this.onKeyDown.bind(this)}></textarea>
         </td>
       </tr>
+      </tfoot>
     )
   }
 }

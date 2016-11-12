@@ -12,7 +12,7 @@ export default class App extends React.Component {
       users: []
     };
 
-    this.selectedComptoirs = ['plop', 'yolo'];
+    this.selectedComptoirs = ['plop', 'yolo', 'mdr'];
 
     // Init socket connection (contains setState refresh)
     this._initSocketConnection();
@@ -97,7 +97,9 @@ export default class App extends React.Component {
         <h1>M O O N Y (<span>{this.state.connected ? 'connected' : 'disconnected'}</span>)</h1>
         <hr/>
         
-        {comptoirsHTML}
+        <div className="comptoir-container">
+          {comptoirsHTML}
+        </div>
       </div>
     )
   }

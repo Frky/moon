@@ -31,15 +31,17 @@ export default class Comptoir extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="comptoir">
         <h2>{this.props.name}</h2>
         {/*<div>{this.state.users.join(', ')} connected</div>*/}
-        <Messages
-          messages={this.props.messages}
-        />
-        <WriteMessage
-          sendMessage={this.sendMessage.bind(this)}
-        />
+        <table>
+          <Messages
+            messages={this.props.messages}
+          />
+          <WriteMessage
+            sendMessage={this.sendMessage.bind(this)}
+          />
+        </table>
       </div>
     )
   }

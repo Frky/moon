@@ -3,6 +3,14 @@ import React from "react";
 import Message from "./Message";
 
 export default class Messages extends React.Component {
+
+  componentDidUpdate() {
+    if (this.props.messages.length > 0) {
+        console.log("plop");
+        this.refs.tbody.scrollTop = this.refs.tbody.scrollHeight;
+    }
+  }
+
   render() {
     const messages = [];
     let last = "";
@@ -12,7 +20,9 @@ export default class Messages extends React.Component {
     }
 
     return (
-      <div>{messages}</div>
+      <tbody ref="tbody">
+        {messages}
+      </tbody>
     )
   }
 }

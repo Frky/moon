@@ -10,7 +10,7 @@ export default class Message extends React.Component {
             { this.props.separator ? <b>{this.props.user}</b> : "" }
         </td>
         <td className="td-separator">
-            { this.props.separator ? <div>•</div> : "" }
+            { this.props.separator ? <div>●</div> : "" }
         </td>
         <td className="td-msg">
           <span dangerouslySetInnerHTML={{__html: msgify(this.props.message)}}></span>

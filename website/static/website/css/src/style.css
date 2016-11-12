@@ -1,13 +1,32 @@
 
+.comptoir-container {
+    overflow-x: scroll;
+    height: 500px;
+    white-space: nowrap;
+}
+
+.comptoir {
+    display: inline-block;
+    width: 400px;
+    height: 350px;
+    position: relative;
+}
+
+.comptoir tbody, tfoot {
+    width: 100%;
+}
+
 .chatbox tr {
+    position: relative;
 }
 
 .chatbox td {
-    line-height: 21px;
+    height: 21px;
+    padding: 0px;
 }
 
 .chatbox td.td-user {
-    min-width: 80px;
+    width: 80px;
     text-align: right;
 }
 
@@ -19,12 +38,55 @@
 }
 
 .chatbox td.td-separator > div {
+    font-size: 0.7em;
+    height: 12px;
+    line-height: 12px;
+    width: 12px;
+    white-space: nowrap;
+    margin: auto;
+
     background-color: white;
     position: relative;
-    height: 10px;
-    line-height: 10px;
     text-align: center;
     color: red;
+}
+
+.chatbox td.td-msg {
+    position: absolute;
+    left: 101px;
+    right: 0px;
+}
+
+.chatbox td.td-separator > div > .round {
+    border-radius: 50%;
+    background-color: red;
+}
+
+.comptoir-container table {
+    border-collapse:collapse;
+    border-width: 0px;
+    border-spacing: 0px;
+}
+
+.comptoir tbody {
+    position: absolute;
+    bottom: 50px;
+    top: 50px;
+    overflow-y: scroll;
+}
+
+.comptoir table tfoot {
+    position: absolute;
+    bottom: 0px;
+    height: 50px;
+}
+
+.comptoir table tfoot tr {
+    height: 50px;
+}
+
+.comptoir table tfoot td.td-msg {
+    height: 100%;
 }
 
 .chatbox td.td-msg .msg-input {
@@ -38,4 +100,7 @@
     box-shadow: none;
 
     background-color: #DDDDDD;
+
+    width: 100%;
+    height: 100%;
 }
