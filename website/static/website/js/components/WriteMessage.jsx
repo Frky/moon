@@ -21,7 +21,7 @@ export default class WriteMessage extends React.Component {
         <div className="msg-separator">
         </div>
         <div className="msg-right" rows="1">
-          <textarea ref="textarea" className="msg-input" onKeyDown={this.onKeyDown.bind(this)}></textarea>
+          <textarea ref="textarea" className="msg-input" onKeyDown={this.onKeyDown.bind(this)} placeholder="Say something..."></textarea>
         </div>
       </div>
     )
