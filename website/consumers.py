@@ -4,7 +4,7 @@ from channels.auth import http_session_user, channel_session_user, channel_sessi
 
 import logging
 import json
-from .models import aComptoir, ConnexionRecord
+from .models import aComptoir
 from .decorators import touch_presence, remove_presence
 
 # Get an instance of a logger
