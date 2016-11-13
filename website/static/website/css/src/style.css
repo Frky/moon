@@ -88,6 +88,8 @@ section .bar {
 
 .bar > .comptoir-container {
     top: 35px;
+    display: flex;
+    align-items: flex-end;
 }
 
 footer {
@@ -99,3 +101,11 @@ footer {
     background-color: #9DC3C0;
 }
 
+a {
+    color: #c39dbd;
+    text-decoration: none;
+}
+
+a.control {
+    color: black;
+}

@@ -78,9 +78,17 @@ export default class Comptoir extends React.Component {
     return (
       <div className="comptoir" onClick={this.handleFocus.bind(this)}>
         <div className="header">
-            {this.props.name} <a href="" onClick={this.leave.bind(this)}>leave</a>
-            - {this.props.connected ? this.props.users.join(',') : '~'}
-            {/*<div>{this.state.users.join(', ')} connected</div>*/}
+          <div className="title">
+            {this.props.name} 
+          </div>
+          <div className="control">
+            <a href="" onClick={this.leave.bind(this)} className="control">
+              <i className="fa fa-times" aria-hidden="true"></i>
+            </a>
+          </div>
+		  <div className="users-connected">
+            {this.props.connected ? this.props.users.join(' • ') : '~'}
+		  </div>
         </div>
         <div className="messages" ref="msgs">
           <Messages

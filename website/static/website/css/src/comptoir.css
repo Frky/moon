@@ -1,5 +1,5 @@
 
-.comptoir {
+.comptoir, .add-comptoir {
     display: inline-flex;
     flex-direction: column;
 
@@ -15,6 +15,7 @@
 }
 
 .comptoir .header {
+	position: relative;
     min-height: 50px;
     height: 50px;
     border-bottom: black 1px solid;
@@ -31,6 +32,30 @@
 .comptoir .footer {
     min-height: 50px;
     height: 50px;
+}
+
+.comptoir .header .title {
+    height: 50px;
+    line-height: 50px;
+    font-size: 1.3em;
+    width: 80%;
+    margin: auto;
+}
+
+.comptoir .header div.control {
+    position: absolute; 
+    color: white;
+    font-size: 0.7em;
+    top: 0px;
+    right: 5px;
+}
+
+.comptoir .header .users-connected {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    font-size: 0.7em;
+    padding-right: 5px;
 }
 
 .comptoir .footer > div > div {
@@ -116,4 +141,42 @@
     font-weight: lighter;
     line-height: 100%;
     flex-grow: 1;
+}
+
+/* Style on add-comptoir */
+.add-comptoir {
+    height: 50px;
+    text-align: center;
+}
+
+.add-comptoir input {
+	font-size: 1.1em;
+    font-family: Athiti;
+    width: 80%;
+    height: 100%;
+    margin: auto;
+    background: none;
+
+    overflow: auto;
+    outline: none;
+	resize: none;
+
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+
+    border: none;
+}
+
+.add-comptoir ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: white;
+}
+.add-comptoir :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color: white;
+}
+.add-comptoir ::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color: white;
+}
+.add-comptoir :-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: white;
 }
