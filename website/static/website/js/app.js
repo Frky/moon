@@ -17,7 +17,7 @@ export default class App extends React.Component {
     this._initSocketConnection();
     this._initHeartbeat();
 
-    if (window.location.pathname == '/u/agora') {
+    if (window.location.pathname == '/agora') {
         this.selectedComptoirs = cookie.load('opencmptrs');
         if (this.selectedComptoirs == undefined)
             this.selectedComptoirs = [];

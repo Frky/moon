@@ -9,6 +9,7 @@ from . import views
 urlpatterns = [
     url(r'^$', views.index, name="index"),
     url(r'^u/(?P<label>[\w-]{,50})$', views.underground_comptoir),
+    url(r'^agora$', views.underground_comptoir, name="agora"),
 
     # Django authentication views
     url(r'^login$', django_login, name="login"),
