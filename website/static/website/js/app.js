@@ -1,4 +1,5 @@
 import React from "react";
+import cookie from 'react-cookie';
 
 import { Bar, Comptoir } from "./components";
 
@@ -17,7 +18,9 @@ export default class App extends React.Component {
     this._initHeartbeat();
 
     if (window.location.pathname == '/u/agora') {
-        this.selectedComptoirs = ["plop", "mdr"];
+        this.selectedComptoirs = cookie.load('opencmptrs');
+        if (this.selectedComptoirs == undefined)
+            this.selectedComptoirs = [];
         this.state.is_bar = true;
     } else {
         this.selectedComptoirs = [window.location.pathname.replace('/u/', '')];
@@ -110,6 +113,7 @@ export default class App extends React.Component {
     } else {
       document.title = '🌑 M O O N 🌑';
     }
+    cookie.save('opencmptrs', JSON.stringify(Object.keys(this.state.comptoirs)));
   }
 
   render() {
