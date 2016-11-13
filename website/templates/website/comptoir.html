@@ -1,17 +1,9 @@
+{% extends "base.html" %}
+
 {% load static %}
 {% load render_bundle from webpack_loader %}
 
-<html>
-<head>
-    <title>M O O N</title>
-
-    <link rel="shortcut icon" type="image/png" href="{% static "website/favicon.ico" %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static "website/css/src/style.css" %}"/>
-</head>
-<body>
-<div>&#127769; M O O N Y &#127769;</div>
-
-    <p>Hello, <span id="user">{{ user.username }}</span></p>
+{% block content %}
 
     <div id="app"></div>
 
@@ -23,5 +15,4 @@
         <script src="{% static "dist/app.bundle.js" %}"></script>
     {% endif %}
 
-</body>
-</html>
+{% endblock %}

@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+    <head>
+        <title>M O O N</title>
+        
+        {% load static %}
+        <link rel="shortcut icon" type="image/png" href="{% static "website/favicon.ico" %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static "website/css/src/style.css" %}"/>
+        {% block additional_css %}
+        {% endblock %}
+    </head>
+
+    <body class="{% block bodyclass %}{% endblock %}">
+        <header>
+            <div>MOON</div>
+        </header>
+
+        <section>
+            {% block content %}
+            {% endblock %}
+        </section>
+
+        <footer>
+        </footer>
+    </body>
+</html>
