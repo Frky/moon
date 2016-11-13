@@ -55,7 +55,7 @@ class aComptoir(models.Model):
             Group(self.group_name).add(channel_name)
             self.broadcast_changed(added=presence)
 
-    def remove_presence(self, channel_name=None, presence=None):
+    def prremove_presence(self, channel_name=None, presence=None):
         if presence is None:
             try:
                 presence = Presence.objects.get(comptoir=self, channel_name=channel_name)

@@ -52,6 +52,10 @@ export default class Comptoir extends React.Component {
         break;
     }
   }
+  
+  handleFocus() {
+    this.props.changeFocus(this.props.name);
+  }
 
   sendMessage(message) {
     if (message.startsWith('/')) {
@@ -72,7 +76,7 @@ export default class Comptoir extends React.Component {
 
   render() {
     return (
-      <div className="comptoir">
+      <div className="comptoir" onClick={this.handleFocus.bind(this)}>
         <div className="header">
             {this.props.name} <a href="" onClick={this.leave.bind(this)}>leave</a>
             - {this.props.connected ? this.props.users.join(',') : '~'}
@@ -86,6 +90,8 @@ export default class Comptoir extends React.Component {
         <div className="footer">
           <WriteMessage
             sendMessage={this.sendMessage.bind(this)}
+            focus={this.props.isFocused || false}
+            handleTab={this.props.handleTab}
           />
         </div>
       </div>

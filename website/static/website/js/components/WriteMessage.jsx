@@ -10,7 +10,16 @@ export default class WriteMessage extends React.Component {
     if (event.keyCode == '13' && !event.shiftKey) {
       this.sendMessage();
       event.preventDefault();
-    };
+    } else if (event.keyCode == '9') {
+      this.props.handleTab();
+      event.preventDefault();
+    }
+  }
+  
+  componentDidUpdate() {
+    if (this.props.focus) {
+      this.refs.textarea.focus()
+    }
   }
 
   render() {
