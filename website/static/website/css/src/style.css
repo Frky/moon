@@ -1,106 +1,101 @@
+@import url("comptoir.css");
 
-.comptoir-container {
-    overflow-x: scroll;
-    height: 500px;
-    white-space: nowrap;
+@font-face {
+    font-family: Athiti;
+    font-weight: 200;
+    src: url("../../fonts/Athiti-Light.ttf");
 }
 
-.comptoir {
-    display: inline-block;
-    width: 400px;
-    height: 350px;
-    position: relative;
+@font-face {
+    font-family: Athiti;
+    font-weight: 400;
+    src: url("../../fonts/Athiti-Regular.ttf");
 }
 
-.comptoir tbody, tfoot {
-    width: 100%;
+@font-face {
+    font-family: Athiti;
+    font-weight: 700;
+    src: url("../../fonts/Athiti-SemiBold.ttf");
 }
 
-.comptoir tr {
-    position: relative;
+@font-face {
+    font-family: LimeLight;
+    src: url("../../fonts/LimeLight.ttf");
 }
 
-.comptoir td {
-    height: 21px;
+body {
     padding: 0px;
+    margin: 0px;
+    background-color: #FBF8F4;
 }
 
-.comptoir td.td-user {
-    width: 80px;
-    text-align: right;
-}
-
-.comptoir td.td-separator {
-    width: 21px;
-    background-image: url("../../img/vert-line.png");
-    background-position-x: center;
-    background-repeat: repeat-y;
-}
-
-.comptoir td.td-separator > div {
-    font-size: 0.7em;
-    height: 12px;
-    line-height: 12px;
-    width: 12px;
-    white-space: nowrap;
-    margin: auto;
-
-    background-color: white;
-    position: relative;
-    text-align: center;
-    color: red;
-}
-
-.comptoir td.td-msg {
+header {
+    height: 50px;
     position: absolute;
-    left: 101px;
+    top: 0px;
+    left: 0px; 
+    right: 0px; 
+    background-color: #9DC3C0;
+}
+
+header > div {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 50px;
+    font-family: "Limelight";
+    font-size: 1.5em;
+}
+
+section {
+    position: absolute;
+    top: 50px;
+    bottom: 10px;
+    left: 0px;
     right: 0px;
 }
 
-.comptoir td.td-separator > div > .round {
-    border-radius: 50%;
-    background-color: red;
+section #app, #app > div {
+    height: 100%;
+    width: 100%;
+    position: relative;
 }
 
-.comptoir table {
-    border-collapse:collapse;
-    border-width: 0px;
-    border-spacing: 0px;
+section .bar {
+    height: 100%;
+    width: 100%;
+    position: relative;
 }
 
-.comptoir tbody {
+.bar > .header {
     position: absolute;
-    bottom: 50px;
-    top: 50px;
-    overflow-y: scroll;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 35px;
 }
 
-.comptoir table tfoot {
+.comptoir-container {
+    position: absolute;
+    top: 0px;
+    bottom: 10px;
+    left: 0px;
+    right: 0px;
+    overflow-x: scroll;
+    white-space: nowrap;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.bar > .comptoir-container {
+    top: 35px;
+}
+
+footer {
+    height: 10px;
     position: absolute;
     bottom: 0px;
-    height: 50px;
+    left: 0px; 
+    right: 0px;
+    background-color: #9DC3C0;
 }
 
-.comptoir table tfoot tr {
-    height: 50px;
-}
-
-.comptoir table tfoot td.td-msg {
-    height: 100%;
-}
-
-.comptoir td.td-msg .msg-input {
-	border: none;
-    overflow: auto;
-    outline: none;
-	resize: none;
-
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-
-    background-color: #DDDDDD;
-
-    width: 100%;
-    height: 100%;
-}

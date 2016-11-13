@@ -39,8 +39,10 @@ export default class Bar extends React.Component {
 
     return (
       <div className="bar">
-        <input type="text" ref="newcmptr" name="new-cmptr" value={this.state.newCmptrName} onChange={this.handleChange.bind(this)} onKeyDown={this.handleKeyDown.bind(this)}/>
-        <input type="submit" name="add-cmptr" value="ADD COMPTOIR" onClick={this.joinComptoir.bind(this)}/>
+        <div className="header">
+          <input type="text" ref="newcmptr" name="new-cmptr" value={this.state.newCmptrName} onChange={this.handleChange.bind(this)} onKeyDown={this.handleKeyDown.bind(this)}/>
+          <input type="submit" name="add-cmptr" value="ADD COMPTOIR" onClick={this.joinComptoir.bind(this)}/>
+        </div>
         <div className="comptoir-container">
           {comptoirsHTML}
         </div>

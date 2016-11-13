@@ -1,0 +1,100 @@
+
+.comptoir {
+    display: inline-flex;
+    flex-direction: column;
+
+    width: 300px;
+    height: 100%;
+    position: relative;
+    margin: 0px 10px 0px 10px ;
+    background-color: white;
+    border-radius: 5px;
+    font-family: "Athiti";
+    font-weight: lighther;
+}
+
+.comptoir .header {
+    height: 50px;
+}
+
+.comptoir .messages {
+    flex-grow: 1;
+    overflow-y: scroll;
+}
+
+.comptoir .footer {
+    height: 50px;
+}
+
+.comptoir .footer > div > div {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.comptoir .msg, .write-msg {
+    display: flex;
+    flex-direction: row; 
+}
+
+.comptoir .msg-left {
+    min-width: 80px;
+    width: 80px;
+    text-align: right;
+    font-weight: bold;
+}
+
+.comptoir .msg-separator {
+    min-width: 21px;
+    width: 21px;
+    background-image: url("../../img/vert-line.png");
+    background-position-x: center;
+    background-repeat: repeat-y;
+    display: flex;
+}
+
+.comptoir .msg-separator span {
+    white-space: nowrap;
+    margin: auto;
+    margin-top: 0px;
+
+    background-color: white;
+    position: relative;
+    text-align: center;
+    color: #D08A8A;
+}
+
+.comptoir .msg-right {
+    flex-grow: 1;
+    overflow-x: scroll;
+    font-weight: lighter;
+}
+
+.comptoir .msg.space:not(:first-child) > div {
+    padding-top: 5px;
+}
+
+.comptoir .footer .msg-right {
+    display: flex;
+    padding-right: 10px;
+}
+
+.comptoir .footer .msg-input {
+	border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    border-radius: 3px;
+
+    overflow: auto;
+    outline: none;
+	resize: none;
+
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+
+    background-color: #CDDED9;
+    font-family: "Athiti";
+    font-weight: lighter;
+    line-height: 100%;
+    flex-grow: 1;
+}

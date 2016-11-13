@@ -28,6 +28,9 @@ export default class Comptoir extends React.Component {
 
   componentDidUpdate() {
     this.join();
+    if (this.props.messages.length > 0) {
+        this.refs.msgs.scrollTop = this.refs.msgs.scrollHeight;
+    }
   }
 
   componentWillReceiveProps(nextProps) {}
@@ -43,17 +46,21 @@ export default class Comptoir extends React.Component {
   render() {
     return (
       <div className="comptoir">
-        <h2>{this.props.name} <a href="" onClick={this.leave.bind(this)}>leave</a></h2>
-        <div>{this.props.connected ? this.props.users.join(',') : '~'}</div>
-        {/*<div>{this.state.users.join(', ')} connected</div>*/}
-        <table>
+        <div className="header">
+            {this.props.name} <a href="" onClick={this.leave.bind(this)}>leave</a>
+            - {this.props.connected ? this.props.users.join(',') : '~'}
+            {/*<div>{this.state.users.join(', ')} connected</div>*/}
+        </div>
+        <div className="messages" ref="msgs">
           <Messages
             messages={this.props.messages}
           />
+        </div>
+        <div className="footer">
           <WriteMessage
             sendMessage={this.sendMessage.bind(this)}
           />
-        </table>
+        </div>
       </div>
     )
   }

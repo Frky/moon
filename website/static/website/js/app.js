@@ -137,8 +137,6 @@ export default class App extends React.Component {
     }
     return (
       <div>
-        <h1>M O O N Y (<span>{this.state.connected ? 'connected' : 'disconnected'}</span>)</h1>
-        <hr/>
         {comptoirsHTML}
       </div>
     );
