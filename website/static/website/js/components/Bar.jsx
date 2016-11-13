@@ -31,6 +31,7 @@ export default class Bar extends React.Component {
         name={c}
         connected={this.props.connected}
         sendMessage={this.props.sendMessage}
+        leaveComptoir={this.props.leaveComptoir}
         {...this.props.comptoirs[c]}
         key={`comptoir-${c}`}
       />

@@ -17,8 +17,13 @@ export default class Comptoir extends React.Component {
     }
   }
 
+  leave(evt) {
+    evt.preventDefault();
+    this.props.leaveComptoir(this.props.name)
+  }
+
   componentDidMount() {
-      this.join();
+    this.join();
   }
 
   componentDidUpdate() {
@@ -40,7 +45,8 @@ export default class Comptoir extends React.Component {
   render() {
     return (
       <div className="comptoir">
-        <h2>{this.props.name}</h2>
+        <h2>{this.props.name} <a href="" onClick={this.leave.bind(this)}>leave</a></h2>
+        <div>{this.props.connected ? this.props.users.join(',') : '~'}</div>
         {/*<div>{this.state.users.join(', ')} connected</div>*/}
         <table>
           <Messages

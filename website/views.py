@@ -52,7 +52,7 @@ def underground_comptoir(req, label):
 
     # First, see if comptoir exists
     try:
-        comptoir = UndergroundComptoir.objects.get(label=label)
+        comptoir = UndergroundComptoir.objects.get(name=label)
         # Get fingerprint from the key
         if key is not None:
             salt = comptoir.keyprint
@@ -73,9 +73,9 @@ def underground_comptoir(req, label):
         else:
             keyprint = bcrypt(key.encode("utf-8"), bcrypt.gensalt()),
         comptoir = UndergroundComptoir(
-                                        label=label, 
-                                        keyprint=keyprint,
-                                    )
+            name=label,
+            keyprint=keyprint,
+        )
         comptoir.save()
         
     # We want to show the last 50 messages, ordered most-recent-last

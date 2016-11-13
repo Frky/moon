@@ -14,6 +14,7 @@ export default class App extends React.Component {
 
     // Init socket connection (contains setState refresh)
     this._initSocketConnection();
+    this._initHeartbeat();
 
     if (window.location.pathname == '/u/agora') {
         this.selectedComptoirs = ["plop", "mdr"];
@@ -52,8 +53,13 @@ export default class App extends React.Component {
       const data = JSON.parse(message.data);
       const action = data.action;
 
+      console.log(data);
+
       if (action == 'MSG') {
         this.state.comptoirs[data.comptoir].messages.push(data);
+        this.setState({});
+      } else if (action == 'PRESENCE') {
+        this.state.comptoirs[data.comptoir].users = data.users;
         this.setState({});
       }
       //let messages = this.state.messages.slice();
@@ -76,12 +82,27 @@ export default class App extends React.Component {
     return output
   }
 
+  _initHeartbeat() {
+    setInterval(
+      () => this.sendMessage({action: 'heartbeat'})
+      , 3000);
+  }
+
   sendMessage(msg) {
     this.chatsock.send(JSON.stringify(msg));
   }
 
   joinComptoir(cmptr) {
     this.state.comptoirs[cmptr] = {messages: [], users: []};
+    this.setState({});
+  }
+
+  leaveComptoir(cmptr) {
+    this.sendMessage({
+      action: 'LEAVE',
+      comptoir: cmptr
+    });
+    delete this.state.comptoirs[cmptr];
     this.setState({});
   }
 
@@ -100,6 +121,7 @@ export default class App extends React.Component {
         <Bar 
             sendMessage={this.sendMessage.bind(this)} 
             joinComptoir={this.joinComptoir.bind(this)}
+            leaveComptoir={this.leaveComptoir.bind(this)}
             connected={this.state.connected}
             comptoirs={this.state.comptoirs}
         />

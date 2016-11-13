@@ -5,9 +5,10 @@ from channels.auth import http_session_user, channel_session_user, channel_sessi
 import logging
 import json
 from .models import aComptoir, ConnexionRecord
+from .decorators import touch_presence, remove_presence
 
 # Get an instance of a logger
-logger = logging.getLogger('socket')
+logger = logging.getLogger('chat')
 
 
 @channel_session_user_from_http
@@ -16,6 +17,7 @@ def ws_connect(message):
     Group('global').add(message.reply_channel)
 
 
+@touch_presence
 @channel_session_user
 def ws_receive(message):
     payload = json.loads(message['text'])
@@ -23,7 +25,8 @@ def ws_receive(message):
 
     action = payload.get('action')
     if action == 'JOIN':
-        Group('comptoir-%s' % payload.get('comptoir')).add(message.reply_channel)
+        aComptoir.objects.add(payload.get('comptoir'), message.reply_channel.name, message.user)
+        # Group('comptoir-%s' % payload.get('comptoir')).add(message.reply_channel)
     elif action == 'MSG':
         comptoir = payload.get('comptoir')
         Group('comptoir-%s' % comptoir).send({
@@ -34,11 +37,15 @@ def ws_receive(message):
                 'comptoir': comptoir,
             })
         })
+    elif action == 'LEAVE':
+        aComptoir.objects.remove(payload.get('comptoir'), message.reply_channel.name)
 
 
+@remove_presence
 @channel_session_user
 def ws_disconnect(message):
     logger.debug('%s has left' % message.user.username)
+
 
 
 @channel_session_user_from_http
