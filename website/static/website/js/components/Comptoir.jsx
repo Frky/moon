@@ -47,6 +47,9 @@ export default class Comptoir extends React.Component {
       case cmd == '/leave':
         this.props.leaveComptoir(this.props.name);
         break;
+      case cmd.startsWith('/join '):
+        this.props.joinComptoir(cmd.replace('/join ', ''));
+        break;
       case cmd.startsWith('/all '):
         this.props.handleBroadcast(cmd.replace('/all ', ''));
         break;

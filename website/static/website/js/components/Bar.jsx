@@ -39,8 +39,12 @@ export default class Bar extends React.Component {
     this.setState({idFocused: (this.state.idFocused + 1) % Object.keys(this.props.comptoirs).length});
   }
 
+  joinComptoirName(cmptr) {
+    this.props.joinComptoir(cmptr);
+  }
+
   joinComptoir(evt) {
-    this.props.joinComptoir(this.refs.newcmptr.value); 
+    this.joinComptoirName(this.refs.newcmptr.value); 
   }
 
   render() {
@@ -50,6 +54,7 @@ export default class Bar extends React.Component {
         connected={this.props.connected}
         sendMessage={this.props.sendMessage}
         leaveComptoir={this.props.leaveComptoir}
+        joinComptoir={this.joinComptoirName.bind(this)}
         isFocused={i == this.state.idFocused}
         handleBroadcast={this.handleBroadcast.bind(this)}
         handleTab={this.handleTab.bind(this)}
