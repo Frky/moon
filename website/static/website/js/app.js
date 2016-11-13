@@ -53,8 +53,6 @@ export default class App extends React.Component {
       const data = JSON.parse(message.data);
       const action = data.action;
 
-      console.log(data);
-
       if (action == 'MSG') {
         this.state.comptoirs[data.comptoir].messages.push(data);
         this.setState({});
@@ -85,7 +83,7 @@ export default class App extends React.Component {
   _initHeartbeat() {
     setInterval(
       () => this.sendMessage({action: 'heartbeat'})
-      , 3000);
+      , 30000);
   }
 
   sendMessage(msg) {

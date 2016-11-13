@@ -40,51 +40,11 @@ def index(req):
         'registeredForm': RegisteredForm(),
     })
 
+
 @login_required(login_url="index")
 def underground_comptoir(req, label):
-    # First, key provided or not?
-    if "key" in req.POST.keys():
-        key = req.POST["key"]
-    elif "key" in req.GET.keys():
-        key = req.GET["key"]
-    else:
-        key = None
+    return render(req, "website/comptoir.html", {})
 
-    # First, see if comptoir exists
-    try:
-        comptoir = UndergroundComptoir.objects.get(name=label)
-        # Get fingerprint from the key
-        if key is not None:
-            salt = comptoir.keyprint
-            keyprint = bcrypt.hashpw(key.encode("utf-8"), salt.encode("utf-8"))
-        else:
-            keyprint = None
-        # Check the keyprint
-        if keyprint != comptoir.keyprint:
-            # TODO error message
-            # TODO handle error correctly
-            # (redirect to home is NOT a reliable way to do)
-            return redirect("index")
-    # If not
-    except ObjectDoesNotExist:
-        # We create it
-        if key is None: 
-            keyprint = None
-        else:
-            keyprint = bcrypt(key.encode("utf-8"), bcrypt.gensalt()),
-        comptoir = UndergroundComptoir(
-            name=label,
-            keyprint=keyprint,
-        )
-        comptoir.save()
-        
-    # We want to show the last 50 messages, ordered most-recent-last
-    messages = reversed(comptoir.messages.order_by('-timestamp')[:50])
-
-    return render(req, "website/comptoir.html", {
-        'comptoir': comptoir,
-        'messages': messages,
-    })
 
 # Authentication views
 def register(req):

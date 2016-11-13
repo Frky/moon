@@ -30,9 +30,7 @@ export default class Comptoir extends React.Component {
     this.join();
   }
 
-  componentWillReceiveProps(nextProps) {
-
-  }
+  componentWillReceiveProps(nextProps) {}
 
   sendMessage(message) {
     this.props.sendMessage({

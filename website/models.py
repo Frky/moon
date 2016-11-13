@@ -17,12 +17,12 @@ logger = logging.getLogger('chat')
 
 class aComptoirManager(models.Manager):
     def add(self, comptoir_name, user_channel_name, user):
-        comptoir, created = aComptoir.objects.get_or_create(name=comptoir_name)
+        comptoir, created = self.get_or_create(name=comptoir_name)
         comptoir.add_presence(user_channel_name, user)
 
     def remove(self, comptoir_name, user_channel_name):
         try:
-            room = aComptoir.objects.get(name=comptoir_name)
+            room = self.get(name=comptoir_name)
         except aComptoir.DoesNotExist:
             return
         room.remove_presence(user_channel_name)
@@ -124,6 +124,8 @@ class Presence(models.Model):
 class UndergroundComptoir(aComptoir):
     # This field stores a bcrypt of the comptoir key (if ciphered)
     keyprint = models.CharField(max_length=60, blank=True, null=True)
+
+    objects = aComptoirManager()
 
 
 class Message(models.Model):
