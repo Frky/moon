@@ -42,7 +42,23 @@ export default class Comptoir extends React.Component {
     }
   }
 
+  handleCommand(cmd) {
+    switch (true) {
+      case cmd == '/leave':
+        this.props.leaveComptoir(this.props.name);
+        break;
+      case cmd.startsWith('/all '):
+        this.props.handleBroadcast(cmd.replace('/all ', ''));
+        break;
+    }
+  }
+
   sendMessage(message) {
+    if (message.startsWith('/')) {
+      this.handleCommand(message);
+      return
+    }
+
     if (message == '') {
       return
     }

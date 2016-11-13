@@ -21,6 +21,14 @@ export default class Bar extends React.Component {
         this.joinComptoir(evt);
   }
 
+  handleBroadcast(message) {
+    this.props.sendMessage({
+      action: 'BROADCAST',
+      message: message,
+      comptoirs: Object.keys(this.props.comptoirs)
+    });
+  }
+
   joinComptoir(evt) {
     this.props.joinComptoir(this.refs.newcmptr.value); 
   }
@@ -32,6 +40,7 @@ export default class Bar extends React.Component {
         connected={this.props.connected}
         sendMessage={this.props.sendMessage}
         leaveComptoir={this.props.leaveComptoir}
+        handleBroadcast={this.handleBroadcast.bind(this)}
         {...this.props.comptoirs[c]}
         key={`comptoir-${c}`}
       />

@@ -36,6 +36,18 @@ def ws_receive(message):
                     'comptoir': comptoir,
                 })
             })
+    elif action == 'BROADCAST':
+        if payload.get('message') != '':
+            # TODO factorisation
+            for comptoir in payload.get('comptoirs'):
+                Group('comptoir-%s' % comptoir).send({
+                    'text': json.dumps({
+                        'action': 'MSG',
+                        'user': message.user.username,
+                        'message': payload.get('message'),
+                        'comptoir': comptoir,
+                    })
+                })
     elif action == 'LEAVE':
         UndergroundComptoir.objects.remove(payload.get('comptoir'), message.reply_channel.name)
 
