@@ -13,6 +13,7 @@ export default class Bar extends React.Component {
   }
 
   changeFocus(name) {
+    console.log('change focus', name);
     this.setState({idFocused: Object.keys(this.props.comptoirs).indexOf(name)});
   }
 
@@ -36,6 +37,7 @@ export default class Bar extends React.Component {
   }
   
   handleTab() {
+    console.log('tab');
     this.setState({idFocused: (this.state.idFocused + 1) % Object.keys(this.props.comptoirs).length});
   }
 

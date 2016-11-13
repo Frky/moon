@@ -103,6 +103,7 @@ export default class Comptoir extends React.Component {
             sendMessage={this.sendMessage.bind(this)}
             focus={this.props.isFocused || false}
             handleTab={this.props.handleTab}
+            changeFocus={this.props.changeFocus}
           />
         </div>
       </div>

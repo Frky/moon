@@ -23,6 +23,8 @@ export default class WriteMessage extends React.Component {
   }
 
   render() {
+    //             onBlur={this.props.changeFocus.bind(null)}
+
     return (
       <div className="write-msg">
         <div className="msg-left">
@@ -30,7 +32,12 @@ export default class WriteMessage extends React.Component {
         <div className="msg-separator">
         </div>
         <div className="msg-right" rows="1">
-          <textarea ref="textarea" className="msg-input" onKeyDown={this.onKeyDown.bind(this)} placeholder="Say something..."></textarea>
+          <textarea
+            ref="textarea"
+            className="msg-input"
+            placeholder="Say something..."
+            onKeyDown={this.onKeyDown.bind(this)}
+          ></textarea>
         </div>
       </div>
     )
