@@ -26,15 +26,16 @@ def ws_receive(message):
     if action == 'JOIN':
         UndergroundComptoir.objects.add(payload.get('comptoir'), message.reply_channel.name, message.user)
     elif action == 'MSG':
-        comptoir = payload.get('comptoir')
-        Group('comptoir-%s' % comptoir).send({
-            'text': json.dumps({
-                'action': 'MSG',
-                'user': message.user.username,
-                'message': payload.get('message'),
-                'comptoir': comptoir,
+        if payload.get('message') != '':
+            comptoir = payload.get('comptoir')
+            Group('comptoir-%s' % comptoir).send({
+                'text': json.dumps({
+                    'action': 'MSG',
+                    'user': message.user.username,
+                    'message': payload.get('message'),
+                    'comptoir': comptoir,
+                })
             })
-        })
     elif action == 'LEAVE':
         UndergroundComptoir.objects.remove(payload.get('comptoir'), message.reply_channel.name)
 

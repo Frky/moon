@@ -106,9 +106,9 @@ export default class App extends React.Component {
 
   componentDidUpdate() {
     if (this.state.connected) {
-      document.title = '🌕 M O O N 🌕'
+      document.title = '🌕 M O O N 🌕';
     } else {
-      document.title = '🌑 M O O N 🌑'
+      document.title = '🌑 M O O N 🌑';
     }
   }
 

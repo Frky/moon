@@ -5,15 +5,18 @@ import Messages from "./Messages";
 export default class Comptoir extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isJoined: false
+    };
   }
 
   join() {
-    if (this.props.connected) {
+    if (this.props.connected && !this.state.isJoined) {
       this.props.sendMessage({
         action: 'JOIN',
         comptoir: this.props.name
       });
+      this.setState({isJoined: true});
     }
   }
 
@@ -33,9 +36,17 @@ export default class Comptoir extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {}
+  componentWillReceiveProps(nextProps) {
+    if (this.props.connected && !nextProps.connected) {
+      this.setState({isJoined: false});
+    }
+  }
 
   sendMessage(message) {
+    if (message == '') {
+      return
+    }
+
     this.props.sendMessage({
       action: 'MSG',
       message: message,
