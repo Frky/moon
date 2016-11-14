@@ -77,12 +77,18 @@ export default class Comptoir extends React.Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if ((!this.props.isFocused && nextProps.isFocused || this.props.isFocused && (this.props.nbUnread > 0 || nextProps.nbUnread > 0)) && this.props.windowFocused) {
+      this.props.readMessages(this.props.name);
+    }
+  }
+
   render() {
     return (
       <div className="comptoir" onClick={this.handleFocus.bind(this)}>
         <div className="header">
           <div className="title">
-            {this.props.name} 
+            {this.props.name} {this.props.nbUnread > 0 ? `(${this.props.nbUnread})` : ''}
           </div>
           <div className="control">
             <a href="" onClick={this.leave.bind(this)} className="control">

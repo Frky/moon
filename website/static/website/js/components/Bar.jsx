@@ -66,10 +66,12 @@ export default class Bar extends React.Component {
       return (<Comptoir
         name={c}
         connected={this.props.connected}
+        isFocused={i == this.state.idFocused}
+        windowFocused={this.props.windowFocused}
         sendMessage={this.props.sendMessage}
+        readMessages={this.props.readMessages}
         leaveComptoir={this.props.leaveComptoir}
         joinComptoir={this.joinComptoirName.bind(this)}
-        isFocused={i == this.state.idFocused}
         handleBroadcast={this.handleBroadcast.bind(this)}
         handleTab={this.handleTab.bind(this)}
         changeFocus={this.changeFocus.bind(this, this.props.comptoirs)}
