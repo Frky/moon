@@ -99,7 +99,11 @@ export default class App extends React.Component {
   }
 
   sendMessage(msg) {
-    this.chatsock.send(JSON.stringify(msg));
+    try {
+      this.chatsock.send(JSON.stringify(msg));
+    } catch (e) {
+      console.log(e);
+    }
   }
   
   readMessages(comptoir) {
