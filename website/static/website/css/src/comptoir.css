@@ -105,6 +105,11 @@
     font-weight: lighter;
 }
 
+.comptoir .msg-right span {
+    display: flex;
+    margin-right: 10px;
+}
+
 .comptoir .msg.space:not(:first-child) > div {
     padding-top: 5px;
 }

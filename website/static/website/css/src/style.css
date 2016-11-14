@@ -81,7 +81,6 @@ section .bar {
     left: 0px;
     right: 0px;
     overflow-x: scroll;
-    white-space: nowrap;
     padding-left: 10px;
     padding-right: 10px;
 }
