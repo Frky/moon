@@ -2,6 +2,8 @@ import React from "react";
 import Comptoir from "./Comptoir";
 import AddComptoir from "./AddComptoir";
 
+import _ from 'underscore';
+
 export default class Bar extends React.Component {
   constructor(props) {
     super(props);
@@ -12,9 +14,8 @@ export default class Bar extends React.Component {
     };
   }
 
-  changeFocus(name) {
-    console.log('change focus', name);
-    this.setState({idFocused: Object.keys(this.props.comptoirs).indexOf(name)});
+  changeFocus(items, name) {
+    this.setState({idFocused: Object.keys(items).indexOf(name)});
   }
 
   handleChange(evt) {
@@ -35,10 +36,13 @@ export default class Bar extends React.Component {
       comptoirs: Object.keys(this.props.comptoirs)
     });
   }
-  
+
+  nextFocusedId(items, direction=1) {
+    return (this.state.idFocused + direction) % Object.keys(items).length
+  }
+
   handleTab() {
-    console.log('tab');
-    this.setState({idFocused: (this.state.idFocused + 1) % Object.keys(this.props.comptoirs).length});
+    this.setState({idFocused: this.nextFocusedId(this.props.comptoirs)});
   }
 
   joinComptoirName(cmptr) {
@@ -47,6 +51,14 @@ export default class Bar extends React.Component {
 
   joinComptoir(evt) {
     this.joinComptoirName(this.refs.newcmptr.value); 
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const oldComptoirs = Object.keys(this.props.comptoirs);
+    const newComptoirs = Object.keys(nextProps.comptoirs);
+    if (oldComptoirs.length < newComptoirs.length) {
+      this.changeFocus(nextProps.comptoirs, _.difference(newComptoirs, oldComptoirs)[0])
+    }
   }
 
   render() {
@@ -60,7 +72,7 @@ export default class Bar extends React.Component {
         isFocused={i == this.state.idFocused}
         handleBroadcast={this.handleBroadcast.bind(this)}
         handleTab={this.handleTab.bind(this)}
-        changeFocus={this.changeFocus.bind(this)}
+        changeFocus={this.changeFocus.bind(this, this.props.comptoirs)}
         {...this.props.comptoirs[c]}
         key={`comptoir-${c}`}
       />)

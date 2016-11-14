@@ -94,8 +94,10 @@ export default class App extends React.Component {
   }
 
   joinComptoir(cmptr) {
-    this.state.comptoirs[cmptr] = {messages: [], users: []};
-    this.setState({});
+    const comptoirs = JSON.parse(JSON.stringify(this.state.comptoirs));
+    comptoirs[cmptr] = {messages: [], users: []};
+
+    this.setState({comptoirs: comptoirs});
   }
 
   leaveComptoir(cmptr) {
