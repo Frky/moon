@@ -1,3 +1,4 @@
+import hashlib
 import logging
 import json
 from datetime import timedelta
@@ -129,11 +130,23 @@ class UndergroundComptoir(aComptoir):
     objects = aComptoirManager()
 
 
+class MessageManager(models.Manager):
+    def add(self, comptoir, user, content):
+        params = {'comptoir': comptoir, 'user': user, 'content': content}
+        to_hash = '{comptoir}{user}{content}'.format(**params)
+        params['id'] = hashlib.sha256(bytes(to_hash, encoding='utf-8')).hexdigest()
+
+        return Message(**params)
+
+
 class Message(models.Model):
+    id = models.CharField(max_length=256, primary_key=True)
     comptoir = models.ForeignKey(aComptoir, related_name='messages')
-    handle = models.TextField()
+    user = models.TextField()
     content = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
+
+    objects = MessageManager()
 
     @property
     def formatted_timestamp(self):
@@ -141,14 +154,15 @@ class Message(models.Model):
 
     def as_dict(self):
         return {
-                    'action': "MSG",
-                    'user': self.handle, 
-                    'message': self.content, 
-                    'timestamp': self.formatted_timestamp
-                }
+            'action': "MSG",
+            'user': self.user,
+            'message': self.content,
+            'timestamp': self.formatted_timestamp,
+            'id': self.id,
+        }
 
     def serialize(self, comptoir=None):
         data = self.as_dict()
         if comptoir is not None:
             data["comptoir"] = comptoir.name
-        return { 'text': json.dumps(data) }
+        return {'text': json.dumps(data)}

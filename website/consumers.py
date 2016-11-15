@@ -28,9 +28,9 @@ def ws_receive(message):
     elif action == 'MSG':
         if payload.get('message') != '':
             comptoir = aComptoir.objects.get(name=payload.get('comptoir'))
-            msg = Message(
+            msg = Message.objects.add(
                     comptoir=comptoir, 
-                    handle=message.user.username,
+                    user=message.user.username,
                     content=payload.get('message'),
                 )
             Group('comptoir-%s' % comptoir.name).send(msg.serialize(comptoir))
