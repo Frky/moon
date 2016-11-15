@@ -2,6 +2,7 @@ from channels import Group
 from channels.sessions import channel_session
 from channels.auth import http_session_user, channel_session_user, channel_session_user_from_http, http_session
 
+import hashlib
 import logging
 import json
 from .models import aComptoir, UndergroundComptoir, Message
@@ -29,10 +30,11 @@ def ws_receive(message):
         if payload.get('message') != '':
             comptoir = aComptoir.objects.get(name=payload.get('comptoir'))
             msg = Message.objects.add(
-                    comptoir=comptoir, 
+                    comptoir=comptoir,
                     user=message.user.username,
                     content=payload.get('message'),
                 )
+            # TODO checksum
             Group('comptoir-%s' % comptoir.name).send(msg.serialize(comptoir))
     elif action == 'BROADCAST':
         if payload.get('message') != '':
@@ -46,6 +48,10 @@ def ws_receive(message):
                         'comptoir': comptoir,
                     })
                 })
+    elif action == 'SYNC_HISTORY':
+        json_to_send = json.dumps(payload)
+        payload['checksum'] = hashlib.sha256(bytes(json_to_send, encoding='utf-8')).hexdigest()
+        Group('comptoir-%s' % payload.get('comptoir')).send({'text': json_to_send})
     elif action == 'LEAVE':
         UndergroundComptoir.objects.remove(payload.get('comptoir'), message.reply_channel.name)
 

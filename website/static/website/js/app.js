@@ -2,6 +2,7 @@ import React from "react";
 import cookie from 'react-cookie';
 
 import { Bar, Comptoir } from "./components";
+import { HISTORY_RE_SYNC_NB_MESSAGE } from './config'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -61,21 +62,24 @@ export default class App extends React.Component {
       if (action == 'MSG') {
         comptoirs[data.comptoir].messages.push(data);
         comptoirs[data.comptoir].nbUnread++;
-        
+
         this.setState({comptoirs: comptoirs});
       } else if (action == 'PRESENCE') {
-        this.state.comptoirs[data.comptoir].users = data.users;
-        this.setState({});
-      }
-      //let messages = this.state.messages.slice();
+        comptoirs[data.comptoir].users = data.users;
 
-      /*if (Object.keys(data).indexOf('users') >= 0) {
-        console.log(data);
-        this.setState({ users: data.users });
-      } else {
-        messages.push(JSON.parse(message.data));
-        this.setState({ messages: messages });
-      }*/
+        this.setState({comptoirs: comptoirs});
+        
+        if (data.isJoin) {
+          const historyMessages = comptoirs[data.comptoir].messages.slice() // TODO limit history
+
+          this.sendMessage({
+            action: 'SYNC_HISTORY',
+            messages: historyMessages,
+            comptoir: data.comptoir
+          })
+        }
+      } else if (action == 'SYNC_HISTORY') {
+      }
     };
   }
 
@@ -96,6 +100,10 @@ export default class App extends React.Component {
   _initWindowFocus() {
     window.onfocus = () => this.setState({windowFocused: true});
     window.onblur = () => this.setState({windowFocused: false});
+  }
+
+  _rebuildMessagesHistory(local, distant) {
+
   }
 
   sendMessage(msg) {
