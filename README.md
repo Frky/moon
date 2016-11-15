@@ -34,3 +34,8 @@ $ daphne moon.asgi:channel_layer --port 8888
 
 1. webpack -p --config webpack-prod.config.js
 2. scp website/static/dist/app.bundle.js  root@blef.fr:/var/www/moon/static/dist/app.bundle.js
+
+# Test
+
+1. Run django command out of the box `./manage.py test website`
+2. With coverage `coverage run --source='.' manage.py test website` and get your report `coverage report`
