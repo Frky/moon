@@ -1,9 +1,18 @@
 import React from "react";
 
 export default class WriteMessage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: "",
+    }
+  }
+
   sendMessage() {
-    this.props.sendMessage(this.refs.textarea.value);
-    this.refs.textarea.value = '';
+    this.props.sendMessage(this.refs.textarea.refs.textarea.value);
+    this.setState({
+      value: "",
+    });
   }
 
   onKeyDown(event) {
@@ -16,14 +25,23 @@ export default class WriteMessage extends React.Component {
     }
   }
   
+  onChange(event) {
+    event.preventDefault();
+    this.setState({
+      value: event.target.value,
+    });
+  }
+
   componentDidUpdate() {
     if (this.props.focus) {
-      this.refs.textarea.focus()
+      this.refs.textarea.refs.textarea.focus();
     }
   }
 
   render() {
     //             onBlur={this.props.changeFocus.bind(null)}
+
+    var TextareaAutosize = require('react-autosize-textarea');
 
     return (
       <div className="write-msg">
@@ -32,12 +50,15 @@ export default class WriteMessage extends React.Component {
         <div className="msg-separator">
         </div>
         <div className="msg-right" rows="1">
-          <textarea
+          <TextareaAutosize 
+            value={this.state.value}
             ref="textarea"
             className="msg-input"
             placeholder="Say something..."
             onKeyDown={this.onKeyDown.bind(this)}
-          ></textarea>
+            onChange={this.onChange.bind(this)}
+            onResize={() => {}}
+          ></TextareaAutosize>
         </div>
       </div>
     )
