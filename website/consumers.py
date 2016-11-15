@@ -4,7 +4,7 @@ from channels.auth import http_session_user, channel_session_user, channel_sessi
 
 import logging
 import json
-from .models import aComptoir, UndergroundComptoir
+from .models import aComptoir, UndergroundComptoir, Message
 from .decorators import touch_presence, remove_presence
 
 # Get an instance of a logger
@@ -27,15 +27,13 @@ def ws_receive(message):
         UndergroundComptoir.objects.add(payload.get('comptoir'), message.reply_channel.name, message.user)
     elif action == 'MSG':
         if payload.get('message') != '':
-            comptoir = payload.get('comptoir')
-            Group('comptoir-%s' % comptoir).send({
-                'text': json.dumps({
-                    'action': 'MSG',
-                    'user': message.user.username,
-                    'message': payload.get('message'),
-                    'comptoir': comptoir,
-                })
-            })
+            comptoir = aComptoir.objects.get(name=payload.get('comptoir'))
+            msg = Message(
+                    comptoir=comptoir, 
+                    handle=message.user.username,
+                    content=payload.get('message'),
+                )
+            Group('comptoir-%s' % comptoir.name).send(msg.serialize(comptoir))
     elif action == 'BROADCAST':
         if payload.get('message') != '':
             # TODO factorisation

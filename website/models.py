@@ -1,4 +1,5 @@
 import logging
+import json
 from datetime import timedelta
 
 from django.conf import settings
@@ -131,7 +132,7 @@ class UndergroundComptoir(aComptoir):
 class Message(models.Model):
     comptoir = models.ForeignKey(aComptoir, related_name='messages')
     handle = models.TextField()
-    message = models.TextField()
+    content = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
 
     @property
@@ -139,4 +140,15 @@ class Message(models.Model):
         return self.timestamp.strftime('%b %-d %-I:%M %p')
 
     def as_dict(self):
-        return {'handle': self.handle, 'message': self.message, 'timestamp': self.formatted_timestamp}
+        return {
+                    'action': "MSG",
+                    'user': self.handle, 
+                    'message': self.content, 
+                    'timestamp': self.formatted_timestamp
+                }
+
+    def serialize(self, comptoir=None):
+        data = self.as_dict()
+        if comptoir is not None:
+            data["comptoir"] = comptoir.name
+        return { 'text': json.dumps(data) }
