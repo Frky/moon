@@ -1,5 +1,6 @@
 import json
 import logging
+import time
 
 from django.contrib import auth
 
@@ -113,3 +114,53 @@ class ComptoirOneClientTestCase(ChannelTestCase):
             client.send_and_consume('websocket.disconnect')
 
         self.assertTrue(len(comptoir.get_users()) == 0)
+
+    def test_prune_one_presence_default_time(self):
+        self.client.send_and_consume('websocket.connect')
+        self._join_comptoir(self.client, 'moon')
+
+        time.sleep(30)
+        aComptoir.objects.prune_presences()
+
+        comptoir = aComptoir.objects.get(name='moon')
+        connected_users = [u.username for u in comptoir.get_users()]
+
+        self.assertIn(self.blef.username, connected_users)
+
+        time.sleep(40)
+
+        aComptoir.objects.prune_presences()
+
+        comptoir = aComptoir.objects.get(name='moon')
+        connected_users = [u.username for u in comptoir.get_users()]
+
+        self.assertNotIn(self.blef.username, connected_users)
+
+        self.assertTrue(aComptoir.objects.filter(name='moon').exists())
+        aComptoir.objects.prune_rooms()
+        self.assertFalse(aComptoir.objects.filter(name='moon').exists())
+
+    def test_prune(self):
+        self.client.send_and_consume('websocket.connect')
+        self._join_comptoir(self.client, 'moon')
+
+        time.sleep(5)
+        aComptoir.objects.prune_presences(age=10)
+
+        comptoir = aComptoir.objects.get(name='moon')
+        connected_users = [u.username for u in comptoir.get_users()]
+
+        self.assertIn(self.blef.username, connected_users)
+
+        time.sleep(10)
+
+        aComptoir.objects.prune_presences(age=10)
+
+        comptoir = aComptoir.objects.get(name='moon')
+        connected_users = [u.username for u in comptoir.get_users()]
+
+        self.assertNotIn(self.blef.username, connected_users)
+
+        self.assertTrue(aComptoir.objects.filter(name='moon').exists())
+        aComptoir.objects.prune_rooms()
+        self.assertFalse(aComptoir.objects.filter(name='moon').exists())
