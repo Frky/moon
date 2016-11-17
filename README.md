@@ -37,5 +37,6 @@ $ daphne moon.asgi:channel_layer --port 8888
 
 # Test
 
-1. Run django command out of the box `./manage.py test website`
-2. With coverage `coverage run --source='.' manage.py test website` and get your report `coverage report`
+1. Install phantomJS `npm -g install phantomjs`
+2. Run django command out of the box `./manage.py test website`
+3. With coverage `coverage run --source='.' manage.py test website` and get your report `coverage report`

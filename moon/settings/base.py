@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'webpack_loader',
     'website',
     'channels',
+    'selenium',
 ]
 
 MIDDLEWARE_CLASSES = [
