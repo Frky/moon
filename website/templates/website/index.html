@@ -10,7 +10,7 @@
             {% csrf_token %}
             {{ anonymousForm }}
             <input type="hidden" name="next" value="{{ request.GET.next }}" />
-            <input type="submit" value="Go to the moon" />
+            <input id='go_to_moon' type="submit" value="Go to the moon" />
         </form>
     </p>
 

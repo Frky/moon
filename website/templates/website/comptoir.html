@@ -9,7 +9,7 @@
 
     <script src="{% static "website/lib/reconnecting-websocket.min.js" %}"></script>
 
-    {% if DEV %}
+    {% if DEV and not TEST %}
         {% render_bundle 'main' %}
     {% else %}
         <script src="{% static "dist/app.bundle.js" %}"></script>
