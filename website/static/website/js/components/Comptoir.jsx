@@ -78,6 +78,12 @@ export default class Comptoir extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (!nextProps.connnected) {
+      this.setState({isJoined: false});
+    }
+    if (!this.props.connected && nextProps.connected) {
+      this.join();
+    }
     if ((!this.props.isFocused && nextProps.isFocused || this.props.isFocused && (this.props.nbUnread > 0 || nextProps.nbUnread > 0)) && this.props.windowFocused) {
       this.props.readMessages(this.props.name);
     }
