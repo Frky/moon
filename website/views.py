@@ -11,7 +11,10 @@ from django.shortcuts import render, redirect
 from website.models import UndergroundComptoir
 from .forms import AnonymousForm, RegisteredForm
 
+
 def index(req):
+    if req.user.is_authenticated():
+        return redirect('agora')
     # Homepage of the website
     # If a form was posted
     if "form_type" in req.POST.keys():
