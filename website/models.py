@@ -5,6 +5,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils import timezone
 from django.utils.timezone import now
@@ -19,7 +20,11 @@ logger = logging.getLogger('chat')
 
 class aComptoirManager(models.Manager):
     def add(self, comptoir_name, user_channel_name, user):
-        comptoir, created = self.get_or_create(name=comptoir_name)
+        try: 
+            comptoir = self.get(name=comptoir_name)
+        except ObjectDoesNotExist:
+            comptoir = self.create(name=comptoir_name)
+        # comptoir, created = self.get_or_create(name=comptoir_name)
         comptoir.add_presence(user_channel_name, user)
 
     def remove(self, comptoir_name, user_channel_name):
@@ -36,11 +41,17 @@ class aComptoirManager(models.Manager):
     def prune_rooms(self):
         aComptoir.objects.filter(presence__isnull=True).delete()
 
+    def create(self, *args, **kwargs):
+        state = hashlib.sha256(bytes(kwargs["name"], encoding='utf-8')).hexdigest()
+        kwargs["state"] = state
+        return super(aComptoirManager, self).create(*args, **kwargs)
+        
+
 
 # General (abstract) class for a Comptoir
 class aComptoir(models.Model):
     name = models.TextField()
-
+    state = models.TextField()
     objects = aComptoirManager()
 
     @property
@@ -100,6 +111,14 @@ class aComptoir(models.Model):
             self.broadcast_changed(bulk_change=True)
 
 
+# Anonymous Comptoir
+class UndergroundComptoir(aComptoir):
+    # This field stores a bcrypt of the comptoir key (if ciphered)
+    keyprint = models.CharField(max_length=60, blank=True, null=True)
+
+    objects = aComptoirManager()
+
+
 class PresenceManager(models.Manager):
     def touch(self, channel_name):
         self.filter(channel_name=channel_name).update(last_seen=now())
@@ -122,18 +141,12 @@ class Presence(models.Model):
         unique_together = [('comptoir', 'channel_name')]
 
 
-# Anonymous Comptoir
-class UndergroundComptoir(aComptoir):
-    # This field stores a bcrypt of the comptoir key (if ciphered)
-    keyprint = models.CharField(max_length=60, blank=True, null=True)
-
-    objects = aComptoirManager()
-
-
 class MessageManager(models.Manager):
     def add(self, comptoir, user, content):
         params = {'comptoir': comptoir, 'user': user, 'content': content}
-        to_hash = '{comptoir}{user}{content}'.format(**params)
+        params['timestamp'] = timezone.now().timestamp()
+        params['state'] = comptoir.state
+        to_hash = '{comptoir}{user}{content}{timestamp}{state}'.format(**params)
         params['id'] = hashlib.sha256(bytes(to_hash, encoding='utf-8')).hexdigest()
 
         return Message(**params)
@@ -144,7 +157,8 @@ class Message(models.Model):
     comptoir = models.ForeignKey(aComptoir, related_name='messages')
     user = models.TextField()
     content = models.TextField()
-    timestamp = models.DateTimeField(default=timezone.now, db_index=True)
+    timestamp = models.DateTimeField(db_index=True)
+    state = models.TextField()
 
     objects = MessageManager()
 
@@ -154,15 +168,20 @@ class Message(models.Model):
 
     def as_dict(self):
         return {
-            'action': "MSG",
-            'user': self.user,
-            'message': self.content,
-            'timestamp': self.formatted_timestamp,
-            'id': self.id,
-        }
+                'user': self.user,
+                'comptoir': self.comptoir.name,
+                'content': self.content,
+                'timestamp': int(self.timestamp),
+                'state': self.state,
+                'id': self.id,
+            }
 
-    def serialize(self, comptoir=None):
-        data = self.as_dict()
-        if comptoir is not None:
-            data["comptoir"] = comptoir.name
-        return {'text': json.dumps(data)}
+    def serialize(self):
+        return {
+                'text': json.dumps({
+                    'action': 'MSG',
+                    'data': self.as_dict()
+                })
+            }
+
+

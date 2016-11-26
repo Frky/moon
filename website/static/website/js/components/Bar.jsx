@@ -30,8 +30,7 @@ export default class Bar extends React.Component {
   }
 
   handleBroadcast(message) {
-    this.props.sendMessage({
-      action: 'BROADCAST',
+    this.props.sendAction('BROADCAST', {
       message: message,
       comptoirs: Object.keys(this.props.comptoirs)
     });
@@ -68,7 +67,7 @@ export default class Bar extends React.Component {
         connected={this.props.connected}
         isFocused={i == this.state.idFocused}
         windowFocused={this.props.windowFocused}
-        sendMessage={this.props.sendMessage}
+        sendAction={this.props.sendAction}
         readMessages={this.props.readMessages}
         leaveComptoir={this.props.leaveComptoir}
         joinComptoir={this.joinComptoirName.bind(this)}

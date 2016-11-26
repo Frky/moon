@@ -24,19 +24,26 @@ def ws_receive(message):
     logger.debug('message received %s' % payload)
 
     action = payload.get('action')
+    data = payload.get('data', None)
     if action == 'JOIN':
-        UndergroundComptoir.objects.add(payload.get('comptoir'), message.reply_channel.name, message.user)
+        UndergroundComptoir.objects.add(data.get('comptoir'), message.reply_channel.name, message.user)
     elif action == 'MSG':
-        if payload.get('message') != '':
-            comptoir = aComptoir.objects.get(name=payload.get('comptoir'))
+        if data.get('content') != '':
+            # this may be a problem if two messages arrive at the same time
+            # the comptoir state will not be updated quickly enough
+            comptoir = aComptoir.objects.get(name=data.get('comptoir'))
             msg = Message.objects.add(
                     comptoir=comptoir,
                     user=message.user.username,
-                    content=payload.get('message'),
+                    content=data.get('content'),
                 )
+            # Update comptoir state
+            comptoir.state = msg.id
+            comptoir.save()
             # TODO checksum
-            Group('comptoir-%s' % comptoir.name).send(msg.serialize(comptoir))
+            Group('comptoir-%s' % comptoir.name).send(msg.serialize())
     elif action == 'BROADCAST':
+        raise NotImplemented
         if payload.get('message') != '':
             # TODO factorisation
             for comptoir in payload.get('comptoirs'):
@@ -49,9 +56,26 @@ def ws_receive(message):
                     })
                 })
     elif action == 'SYNC_HISTORY':
-        json_to_send = json.dumps(payload)
-        payload['checksum'] = hashlib.sha256(bytes(json_to_send, encoding='utf-8')).hexdigest()
-        Group('comptoir-%s' % payload.get('comptoir')).send({'text': json_to_send})
+        msg_history = list()
+        cmptr = None
+        for m in data.get("messages"):
+            # TODO check existency of comptoir
+            m["comptoir"] = aComptoir.objects.get(name=m["comptoir"])
+            if cmptr is None: 
+                cmptr = m["comptoir"]
+            elif cmptr != m["comptoir"]:
+                # TODO
+                raise Exception
+            msg_history.append(Message(**m).as_dict())
+        if len(msg_history) > 0:
+            Group('comptoir-%s' % cmptr.name).send({
+                    'text': json.dumps({
+                        'action': 'SYNC_HISTORY', 
+                        'data': {
+                            'messages': msg_history,
+                        },
+                    })
+                })
     elif action == 'LEAVE':
         UndergroundComptoir.objects.remove(payload.get('comptoir'), message.reply_channel.name)
 
@@ -60,3 +84,4 @@ def ws_receive(message):
 @channel_session_user
 def ws_disconnect(message):
     pass
+

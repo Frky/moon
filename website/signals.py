@@ -19,8 +19,10 @@ def broadcast_presence(sender, room, **kwargs):
     Group(room.group_name).send({
         'text': json.dumps({
             'action': 'PRESENCE',
-            'isJoin': kwargs.get('added', None) is not None,
-            'comptoir': room.name,
-            'users': [user.username for user in room.get_users()],
+            'data': {
+                'isJoin': kwargs.get('added', None) is not None,
+                'comptoir': room.name,
+                'users': [user.username for user in room.get_users()],
+            }
         })
     })

@@ -12,10 +12,7 @@ export default class Comptoir extends React.Component {
 
   join() {
     if (this.props.connected && !this.state.isJoined) {
-      this.props.sendMessage({
-        action: 'JOIN',
-        comptoir: this.props.name
-      });
+      this.props.sendAction('JOIN', {comptoir: this.props.name});
       this.setState({isJoined: true});
     }
   }
@@ -70,9 +67,8 @@ export default class Comptoir extends React.Component {
       return
     }
 
-    this.props.sendMessage({
-      action: 'MSG',
-      message: message,
+    this.props.sendAction('MSG', { 
+      content: message,
       comptoir: this.props.name
     });
   }

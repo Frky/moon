@@ -55,14 +55,14 @@ export default class App extends React.Component {
     };
 
     this.chatsock.onmessage = (message) => {
-      const data = JSON.parse(message.data);
+      const content = JSON.parse(message.data);
       const comptoirs = JSON.parse(JSON.stringify(this.state.comptoirs)); // TODO optimisation
-      const action = data.action;
+      const data = content.data;
+      const action = content.action;
 
       if (action == 'MSG') {
         comptoirs[data.comptoir].messages.push(data);
         comptoirs[data.comptoir].nbUnread++;
-
         this.setState({comptoirs: comptoirs});
       } else if (action == 'PRESENCE') {
         comptoirs[data.comptoir].users = data.users;
@@ -72,13 +72,25 @@ export default class App extends React.Component {
         if (data.isJoin) {
           const historyMessages = comptoirs[data.comptoir].messages.slice() // TODO limit history
 
-          this.sendMessage({
-            action: 'SYNC_HISTORY',
+          this.sendAction('SYNC_HISTORY', {
             messages: historyMessages,
             comptoir: data.comptoir
           })
         }
       } else if (action == 'SYNC_HISTORY') {
+        const state_history = data.messages[data.messages.length - 1].state;
+        const len_local = comptoirs[data.messages[0].comptoir].messages.length;
+        let state_local;
+        if (len_local == 0)
+            state_local = "";
+        else 
+            state_local = comptoirs[data.messages[0].comptoir].messages[len_local - 1].state;
+        if (state_history == state_local)
+            return;
+        data.messages.map((msg) => { 
+          comptoirs[msg.comptoir].messages.push(msg);
+          this.setState({comptoirs: comptoirs});
+        })
       }
     };
   }
@@ -93,7 +105,7 @@ export default class App extends React.Component {
 
   _initHeartbeat() {
     setInterval(
-      () => this.sendMessage({action: 'heartbeat'})
+      () => this.sendAction('HEARTBEAT', {})
       , 30000);
   }
 
@@ -106,14 +118,22 @@ export default class App extends React.Component {
 
   }
 
-  sendMessage(msg) {
-    try {
-      this.chatsock.send(JSON.stringify(msg));
-    } catch (e) {
-      console.log(e);
+  sendAction(action, data) {
+    switch(action) {
+    case 'JOIN':
+    case 'MSG':
+    case 'SYNC_HISTORY':
+        this.chatsock.send(JSON.stringify({action: action, data: data}))
+        return;
+    case 'HEARTBEAT':
+        this.chatsock.send(JSON.stringify({action: action}))
+        return
+    case 'BROADCAST':
+        /* TODO send message for every comptoir given in data */
+        throw NotImplemented;
     }
   }
-  
+
   readMessages(comptoir) {
     const comptoirs = JSON.parse(JSON.stringify(this.state.comptoirs));
     comptoirs[comptoir].nbUnread = 0;
@@ -133,8 +153,7 @@ export default class App extends React.Component {
   }
 
   leaveComptoir(cmptr) {
-    this.sendMessage({
-      action: 'LEAVE',
+    this.sendAction('LEAVE', { 
       comptoir: cmptr
     });
     delete this.state.comptoirs[cmptr];
@@ -169,7 +188,7 @@ export default class App extends React.Component {
     if (this.state.is_bar) {
       comptoirsHTML = (
         <Bar 
-            sendMessage={this.sendMessage.bind(this)} 
+            sendAction={this.sendAction.bind(this)} 
             joinComptoir={this.joinComptoir.bind(this)}
             leaveComptoir={this.leaveComptoir.bind(this)}
             readMessages={this.readMessages.bind(this)}
@@ -185,7 +204,7 @@ export default class App extends React.Component {
           name={cmptr}
           connected={this.state.connected}
           windowFocused={this.state.windowFocused}
-          sendMessage={this.sendMessage.bind(this)}
+          sendAction={this.sendAction.bind(this)}
           readMessages={this.readMessages.bind(this)}
           {...this.state.comptoirs[cmptr]}
         />

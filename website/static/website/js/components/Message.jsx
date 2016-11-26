@@ -8,6 +8,7 @@ export default class Message extends React.Component {
   }
 
   render() {
+      console.log(this.props.state);
     return (
       <div className={ this.props.separator ? "msg space" : "msg" }>
         <div className="msg-left" onClick={this.handleSelect.bind(this)}>
@@ -17,7 +18,7 @@ export default class Message extends React.Component {
             { this.props.separator ? <span>●</span> : "" }
         </div>
         <div className="msg-right">
-          <span onClick={this.handleSelect.bind(this)} dangerouslySetInnerHTML={{__html: msgify(this.props.message)}}></span>
+          <span onClick={this.handleSelect.bind(this)} dangerouslySetInnerHTML={{__html: msgify(this.props.content)}}></span>
         </div>
       </div>
     )
